@@ -766,6 +766,19 @@ class VectorPreferences @Inject constructor(
         return defaultPrefs.getBoolean(SETTINGS_CALL_PREVENT_ACCIDENTAL_CALL_KEY, false)
     }
 
+
+    /**
+     * Get the Jitsi server address for mesh network.
+     */
+
+    fun jitsiServerUrl(): String? {
+        var jitsiAddress = defaultPrefs.getString("SETTINGS_CALL_JITSI_SERVER_URL_KEY", "")
+        if (jitsiAddress!!.trim()=="") {
+            return null
+        }
+        return jitsiAddress
+    }
+
     /**
      * Tells if the read receipts should be shown.
      *
