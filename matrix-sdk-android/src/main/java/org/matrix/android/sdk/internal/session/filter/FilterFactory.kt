@@ -45,44 +45,7 @@ internal object FilterFactory {
         return FilterUtil.enableLazyLoading(Filter(), true)
     }
 
-    fun createElementFilter(): Filter {
-        return Filter(
-                room = RoomFilter(
-                        timeline = createElementTimelineFilter(),
-                        state = createElementStateFilter()
-                )
-        )
-    }
-
     fun createDefaultRoomFilter(): RoomEventFilter {
         return RoomEventFilter(lazyLoadMembers = true)
     }
-
-    fun createElementRoomFilter(): RoomEventFilter {
-        return RoomEventFilter(
-                lazyLoadMembers = true,
-                // TODO Enable this for optimization
-                // types = (listOfSupportedEventTypes + listOfSupportedStateEventTypes).toMutableList()
-        )
-    }
-
-    private fun createElementTimelineFilter(): RoomEventFilter? {
-        return RoomEventFilter(enableUnreadThreadNotifications = true)
-    }
-
-    private fun createElementStateFilter(): RoomEventFilter {
-        return RoomEventFilter(lazyLoadMembers = true)
-    }
-
-    // Get only managed types by Element
-    private val listOfSupportedEventTypes = listOf(
-            // TODO Complete the list
-            EventType.MESSAGE
-    )
-
-    // Get only managed types by Element
-    private val listOfSupportedStateEventTypes = listOf(
-            // TODO Complete the list
-            EventType.STATE_ROOM_MEMBER
-    )
 }

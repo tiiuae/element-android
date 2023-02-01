@@ -66,7 +66,7 @@ class AudioMessageHelper @Inject constructor(
 
     fun startRecording(roomId: String) {
         stopPlayback()
-        playbackTracker.makeAllPlaybacksIdle()
+        playbackTracker.pauseAllPlaybacks()
         amplitudeList.clear()
 
         try {
@@ -149,7 +149,7 @@ class AudioMessageHelper @Inject constructor(
     }
 
     private fun startPlayback(id: String, file: File) {
-        val currentPlaybackTime = playbackTracker.getPlaybackTime(id)
+        val currentPlaybackTime = playbackTracker.getPlaybackTime(id) ?: 0
 
         try {
             FileInputStream(file).use { fis ->
@@ -198,12 +198,8 @@ class AudioMessageHelper @Inject constructor(
 
     private fun startRecordingAmplitudes() {
         amplitudeTicker?.stop()
-        amplitudeTicker = CountUpTimer(50).apply {
-            tickListener = object : CountUpTimer.TickListener {
-                override fun onTick(milliseconds: Long) {
-                    onAmplitudeTick()
-                }
-            }
+        amplitudeTicker = CountUpTimer(intervalInMs = 50).apply {
+            tickListener = CountUpTimer.TickListener { onAmplitudeTick() }
             resume()
         }
     }
@@ -234,11 +230,7 @@ class AudioMessageHelper @Inject constructor(
     private fun startPlaybackTicker(id: String) {
         playbackTicker?.stop()
         playbackTicker = CountUpTimer().apply {
-            tickListener = object : CountUpTimer.TickListener {
-                override fun onTick(milliseconds: Long) {
-                    onPlaybackTick(id)
-                }
-            }
+            tickListener = CountUpTimer.TickListener { onPlaybackTick(id) }
             resume()
         }
         onPlaybackTick(id)
@@ -261,8 +253,8 @@ class AudioMessageHelper @Inject constructor(
         playbackTicker = null
     }
 
-    fun clearTracker() {
-        playbackTracker.clear()
+    fun stopTracking() {
+        playbackTracker.unregisterListeners()
     }
 
     fun stopAllVoiceActions(deleteRecord: Boolean = true): MultiPickerAudioType? {
