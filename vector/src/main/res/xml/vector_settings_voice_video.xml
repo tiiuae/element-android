@@ -10,6 +10,14 @@
             android:summary="@string/settings_call_show_confirmation_dialog_summary"
             android:title="@string/settings_call_show_confirmation_dialog_title" />
 
+
+        <im.vector.app.core.preference.VectorEditTextPreference
+            android:defaultValue=""
+            android:key="SETTINGS_CALL_JITSI_SERVER_URL_KEY"
+            android:title="Jitsi server address for mesh network"
+            app:useSimpleSummaryProvider="true" />
+
+
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="true"
             android:disableDependentsState="true"

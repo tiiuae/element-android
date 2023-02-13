@@ -128,7 +128,7 @@ android {
     // Ref: https://issuetracker.google.com/issues/144111441
     ndkVersion "21.3.6528147"
 
-    compileSdk versions.compileSdk
+    compileSdk 33 //versions.compileSdk
 
     defaultConfig {
         applicationId "im.vector.app"
