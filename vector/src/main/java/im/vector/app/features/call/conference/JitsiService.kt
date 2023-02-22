@@ -26,6 +26,7 @@ import im.vector.app.features.call.conference.jwt.JitsiJWTFactory
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.settings.VectorLocaleProvider
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.themes.ThemeProvider
 import okhttp3.Request
 import org.jitsi.meet.sdk.JitsiMeetUserInfo
@@ -50,6 +51,7 @@ class JitsiService @Inject constructor(
         private val jitsiJWTFactory: JitsiJWTFactory,
         private val clock: Clock,
         private val vectorLocale: VectorLocaleProvider,
+        private val vectorPreferences: VectorPreferences,
 ) {
 
     companion object {
@@ -69,7 +71,7 @@ class JitsiService @Inject constructor(
             rawService.getElementWellknown(session.sessionParams)
                     ?.jitsiServer
                     ?.preferredDomain
-        }
+        }?: vectorPreferences.jitsiServerUrl()
         val jitsiDomain = preferredJitsiDomain ?: stringProvider.getString(R.string.preferred_jitsi_domain)
         val jitsiAuth = getJitsiAuth(jitsiDomain)
         val confId = createConferenceId(roomId, jitsiAuth)
