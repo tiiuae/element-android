@@ -96,7 +96,8 @@ allprojects {
         }
         // Jitsi repo
         maven {
-            url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-6.2.2"
+            url "/tmp/jitsi-sdk-7.0.1.old/"
+            //url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-6.2.2"
             // Note: to test Jitsi release you can use a local file like this:
             // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-6.2.2"
             content {
