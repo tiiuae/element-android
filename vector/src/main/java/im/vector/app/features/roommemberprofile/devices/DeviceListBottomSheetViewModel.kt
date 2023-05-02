@@ -45,6 +45,7 @@ data class DeviceListViewState(
         val allowDeviceAction: Boolean,
         val userItem: MatrixItem? = null,
         val memberCrossSigningKey: MXCrossSigningInfo? = null,
+        val myDeviceId: String = "",
         val cryptoDevices: Async<List<CryptoDeviceInfo>> = Loading(),
         val selectedDevice: CryptoDeviceInfo? = null
 ) : MavericksState
@@ -70,6 +71,7 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
                     userId = userId,
                     allowDeviceAction = args.allowDeviceAction,
                     userItem = session.getUserOrDefault(userId).toMatrixItem(),
+                    myDeviceId = session.sessionParams.deviceId,
             )
         }
     }
@@ -133,8 +135,15 @@ class DeviceListBottomSheetViewModel @AssistedInject constructor(
 
     private fun manuallyVerify(action: DeviceListAction.ManuallyVerify) {
         if (!initialState.allowDeviceAction) return
-        session.cryptoService().verificationService().beginKeyVerification(VerificationMethod.SAS, initialState.userId, action.deviceId, null)?.let { txID ->
-            _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(initialState.userId, txID))
+        viewModelScope.launch {
+            session.cryptoService().verificationService().requestDeviceVerification(
+                    methods = listOf(VerificationMethod.SAS),
+                    otherUserId = initialState.userId,
+                    otherDeviceId = action.deviceId,
+            ).transactionId
+                    .let { txID ->
+                        _viewEvents.post(DeviceListBottomSheetViewEvents.Verify(initialState.userId, txID))
+                    }
         }
     }
 }

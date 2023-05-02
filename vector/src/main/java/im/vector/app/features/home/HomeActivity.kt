@@ -30,7 +30,9 @@ import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -74,6 +76,7 @@ import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.popup.VerificationVectorAlert
 import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
+import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -84,9 +87,11 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.usercode.UserCodeActivity
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
 import im.vector.lib.core.utils.compat.getParcelableExtraCompat
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.sync.InitialSyncStrategy
@@ -254,11 +259,7 @@ class HomeActivity :
                 HomeActivityViewEvents.PromptToEnableSessionPush -> handlePromptToEnablePush()
                 HomeActivityViewEvents.StartRecoverySetupFlow -> handleStartRecoverySetup()
                 is HomeActivityViewEvents.ForceVerification -> {
-                    if (it.sendRequest) {
-                        navigator.requestSelfSessionVerification(this)
-                    } else {
-                        navigator.waitSessionVerification(this)
-                    }
+                    navigator.requestSelfSessionVerification(this)
                 }
                 is HomeActivityViewEvents.OnCrossSignedInvalidated -> handleCrossSigningInvalidated(it)
                 HomeActivityViewEvents.ShowAnalyticsOptIn -> handleShowAnalyticsOptIn()
@@ -402,8 +403,8 @@ class HomeActivity :
 
     private fun handleStartRecoverySetup() {
         // To avoid IllegalStateException in case the transaction was executed after onSaveInstanceState
-        lifecycleScope.launchWhenResumed {
-            navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) { navigator.open4SSetup(this@HomeActivity, SetupMode.NORMAL) }
         }
     }
 
@@ -454,7 +455,16 @@ class HomeActivity :
                 titleRes = R.string.crosssigning_verify_this_session,
                 descRes = R.string.confirm_your_identity,
         ) {
-            it.navigator.waitSessionVerification(it)
+            // check first if it's not an outdated request?
+            activeSessionHolder.getSafeActiveSession()?.let { session ->
+                session.coroutineScope.launch {
+                    if (!session.cryptoService().crossSigningService().isCrossSigningVerified()) {
+                        withContext(Dispatchers.Main) {
+                            it.navigator.requestSelfSessionVerification(it)
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -466,11 +476,7 @@ class HomeActivity :
                 titleRes = R.string.crosssigning_verify_this_session,
                 descRes = R.string.confirm_your_identity,
         ) {
-            if (event.waitForIncomingRequest) {
-                it.navigator.waitSessionVerification(it)
-            } else {
-                it.navigator.requestSelfSessionVerification(it)
-            }
+            it.navigator.requestSelfSessionVerification(it)
         }
     }
 

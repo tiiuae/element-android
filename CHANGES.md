@@ -1,3 +1,89 @@
+Changes in Element v1.5.32 (2023-04-19)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix multiple read receipts for the same user in timeline. ([#7882](https://github.com/vector-im/element-android/issues/7882))
+ - The new permalink rendering is not applied on permalink created with the potential clientPermalinkBaseUrl ([#8307](https://github.com/vector-im/element-android/issues/8307))
+ - Keep screen on while recording voicebroadcast ([#8313](https://github.com/vector-im/element-android/issues/8313))
+
+
+Changes in Element v1.5.30 (2023-04-05)
+=======================================
+
+Features ✨
+----------
+ - Permalinks to a room/space are pillified ([#8219](https://github.com/vector-im/element-android/issues/8219))
+ - Permalinks to a matrix user are pillified ([#8220](https://github.com/vector-im/element-android/issues/8220))
+ - Permalinks to messages are pillified ([#8221](https://github.com/vector-im/element-android/issues/8221))
+
+Bugfixes 🐛
+----------
+ - Custom sticker picker loads indefinitely ([#8026](https://github.com/vector-im/element-android/issues/8026))
+ - Replace hardcoded colors by theming colors on save button. ([#8208](https://github.com/vector-im/element-android/issues/8208))
+ - Add RTL support to RemoveJitsiWidgetView ([#8210](https://github.com/vector-im/element-android/issues/8210))
+ - Add user completion for matrix ids ([#8217](https://github.com/vector-im/element-android/issues/8217))
+ - Long name are truncated in the pills ([#8218](https://github.com/vector-im/element-android/issues/8218))
+ - The read marker is stuck in the past ([#8268](https://github.com/vector-im/element-android/issues/8268))
+
+Other changes
+-------------
+ - Replace Terms and Conditions with Acceptable Use Policy. ([#8286](https://github.com/vector-im/element-android/issues/8286))
+
+
+Changes in Element v1.5.28 (2023-03-08)
+=======================================
+
+Features ✨
+----------
+ - [Poll] Error handling for push rules synchronization ([#8141](https://github.com/vector-im/element-android/issues/8141))
+ - Add aggregated unread indicator for spaces in the new layout ([#8157](https://github.com/vector-im/element-android/issues/8157))
+ - [Rich text editor] Add ability to insert GIFs from keyboard ([#8185](https://github.com/vector-im/element-android/issues/8185))
+
+Bugfixes 🐛
+----------
+ - Space setting category doesn't show up ([#7989](https://github.com/vector-im/element-android/issues/7989))
+ - Fix timeline loading a wrong room on permalink if a matching event id is found in a different room ([#8168](https://github.com/vector-im/element-android/issues/8168))
+ - Reapply local push rules after event decryption ([#8170](https://github.com/vector-im/element-android/issues/8170))
+ - [Rich text editor] Fix code appearance ([#8171](https://github.com/vector-im/element-android/issues/8171))
+ - Extend workaround for extra new lines in timeline ([#8187](https://github.com/vector-im/element-android/issues/8187))
+ - [Poll history] Fixing small issue about font style ([#8190](https://github.com/vector-im/element-android/issues/8190))
+ - Update room member shields behavior ([#8195](https://github.com/vector-im/element-android/issues/8195))
+
+Other changes
+-------------
+ - Direct Message: Manage encrypted DM in case of invite by email ([#6912](https://github.com/vector-im/element-android/issues/6912))
+
+
+Changes in Element v1.5.26 (2023-02-22)
+=======================================
+
+Features ✨
+----------
+ - Adds MSC3824 OIDC-awareness when talking to an OIDC-enabled homeservers ([#6367](https://github.com/vector-im/element-android/issues/6367))
+ - [Poll] Synchronize polls push rules with message push rules ([#8007](https://github.com/vector-im/element-android/issues/8007))
+ - [Rich text editor] Add code block, quote and indentation actions ([#8045](https://github.com/vector-im/element-android/issues/8045))
+ - [Poll] History list: details screen of a poll
+ - [Poll] History list: enable the new settings entry in release mode ([#8056](https://github.com/vector-im/element-android/issues/8056))
+ - [Location sharing] Show own location in map views ([#8110](https://github.com/vector-im/element-android/issues/8110))
+ - Updates to protocol used for Sign in with QR code ([#8123](https://github.com/vector-im/element-android/issues/8123))
+ - [Poll] Synchronize polls and message push rules ([#8130](https://github.com/vector-im/element-android/issues/8130))
+
+Bugfixes 🐛
+----------
+ - Android app does not show correct poll data ([#6121](https://github.com/vector-im/element-android/issues/6121))
+ - Fix timeline always jumps to the bottom when screen goes back to foreground. ([#8090](https://github.com/vector-im/element-android/issues/8090))
+ - [Poll] Improve rendering of poll end message when poll start event isn't available ([#8129](https://github.com/vector-im/element-android/issues/8129))
+ - Replace hardcoded colors by theming colors on send button. ([#8142](https://github.com/vector-im/element-android/issues/8142))
+ - [Timeline]: Editing a reply from iOS breaks the "in reply to" rendering ([#8150](https://github.com/vector-im/element-android/issues/8150))
+
+Other changes
+-------------
+ - Build unmerged APKs on pull request ([#8044](https://github.com/vector-im/element-android/issues/8044))
+ - Replace 'Bots' with 'bots' inside terms_description_for_integration_manager ([#8115](https://github.com/vector-im/element-android/issues/8115))
+ - Fix ktlint issue with fields and a new line. ([#8139](https://github.com/vector-im/element-android/issues/8139))
+
+
 Changes in Element v1.5.25 (2023-02-15)
 =======================================
 
